@@ -1,5 +1,5 @@
 name: biocentral
-version: '1.1.0+1'
+version: '2.0.0+1'
 publish_to: none
 environment:
   sdk: ">=3.5.0"
@@ -13,9 +13,7 @@ dependencies:
   auto_size_text: ^3.0.0
   bio_flutter: ^0.0.12
   biocentral_api:
-    git:
-      url: https://github.com/biocentral/biocentral_api.git
-      path: dart
+    path: ../biocentral_api/dart
   bloc: ^8.1.3
   bloc_effects: ^1.0.4
   collection: ^1.18.0
@@ -30,6 +28,7 @@ dependencies:
   flutter_animate: ^4.5.0
   flutter_bloc: ^8.1.4
   flutter_markdown: ^0.7.1
+  flutter_svg: ^2.3.0
   fpdart: ^1.1.0
   http: ^1.2.1
   intl: ^0.19.0
@@ -45,9 +44,9 @@ dependencies:
   ranking_system: ^0.0.1
   serious_python:
     git:
-      url: https://github.com/biocentral/serious-python.git
+      url: https://github.com/AeneasTews/serious-python.git
       path: src/serious_python
-      ref: feature/add-web-support
+      ref: fix/windir-cmake-path
   shared_preferences: '^2.2.2'
   shimmer: '^3.0.0'
   simple_icons: '^16.23.0'
@@ -71,6 +70,8 @@ flutter_launcher_icons:
   web:
     generate: true
   windows:
+    generate: true
+  macos:
     generate: true
   flutter_lints: "^4.0.0"
 

@@ -1,5 +1,4 @@
 import os
-import sys
 import shutil
 import subprocess
 import getpass
@@ -14,6 +13,28 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 
 PACKAGES = [
+    {
+        "name": "biotrainer-core",
+        "target_version": "2.1.1",
+        "type": "pypi",
+        "path": PROJECT_ROOT / "biotrainer" / "biotrainer-core",
+        "changelog": PROJECT_ROOT / "biotrainer" / "Changelog.md",
+    },
+    {
+        "name": "biotrainer",
+        "target_version": "2.1.1",
+        "type": "pypi",
+        "path": PROJECT_ROOT / "biotrainer",
+        "changelog": PROJECT_ROOT / "biotrainer" / "Changelog.md",
+    },
+    {
+        "name": "biocentral_ire",
+        "target_version": "2.0.0+1",
+        "path": PROJECT_ROOT / "biocentral_ire",
+        "changelog": PROJECT_ROOT / "biocentral_ire" / "Changelog.md",
+        "version_check_only": True,
+        "type": "pub.dev",
+    },
     {
         "name": "biocentral_api",
         "type": "pypi",
@@ -30,6 +51,13 @@ PACKAGES = [
         "name": "biocentral_vis",
         "type": "pypi",
         "path": PROJECT_ROOT / "biocentral_vis" / "python",
+        "changelog": PROJECT_ROOT / "Changelog.md",
+    },
+    {
+        "name": "biocentral_server",
+        "type": "pypi",
+        "target_version": "2.0.1",
+        "path": PROJECT_ROOT / "biocentral_server",
         "changelog": PROJECT_ROOT / "Changelog.md",
     },
     {
@@ -78,6 +106,7 @@ def get_version_from_file(pkg: Dict) -> str:
     return ""
 
 def check_version_in_changelog(pkg: Dict, version: str) -> bool:
+    version = version.split("+")[0] if "+" in version else version
     changelog_path = pkg.get("changelog")
     if not changelog_path or not changelog_path.exists():
         print(f"Warning: Changelog not found for {pkg['name']} at {changelog_path}")
@@ -157,8 +186,17 @@ def publish_dart(pkg: Dict):
     # This will be interactive if authorization is needed
     subprocess.run("dart pub publish", shell=True, cwd=str(cwd))
 
+
+def _print_package_summary(pkg, target_version: str, package_status: List[str]):
+    # Print summary for this package
+    print(f"\n--- Summary for {pkg['name']} ({pkg['type']}) ---")
+    print(f"  Version: {target_version}")
+    for status in package_status:
+        print(f"  {status}")
+
+
 def main():
-    target_version = "2.0.0" # Specified version number
+    default_target_version = "2.0.0" # Specified version number
     
     parser = argparse.ArgumentParser(description="Biocentral Build and Release Script")
     parser.add_argument("--dry-run", action="store_true", help="Execute in dry-run mode (default)")
@@ -172,7 +210,7 @@ def main():
         dry_run = False
         
     mode_str = "DRY RUN" if dry_run else "RELEASE"
-    print(f"=== Biocentral Release Script - Target Version: {target_version} ({mode_str} mode) ===")
+    print(f"=== Biocentral Release Script - Target Version: {default_target_version} ({mode_str} mode) ===")
 
     pypi_token = None
     if not dry_run:
@@ -181,6 +219,9 @@ def main():
     # Release loop
     summary = []
     for pkg in PACKAGES:
+        target_version = str(pkg.get("target_version", default_target_version))
+        version_check_only = pkg.get("version_check_only", False)
+
         package_status = []
         print(f"\n--- Processing {pkg['name']} ({pkg['type']}) ---")
 
@@ -199,6 +240,11 @@ def main():
         else:
             package_status.append(f"FAILED: Changelog does not mention {target_version}")
 
+        if version_check_only:
+            _print_package_summary(pkg, target_version, package_status)
+            input("Press Enter to continue to next package...")
+            continue
+
         # 2. Check if already deployed
         already_deployed = False
         try:
@@ -209,6 +255,7 @@ def main():
             package_status.append(f"WARNING: Could not check deployment status: {e}")
 
         if not pkg_version_ok or not pkg_changelog_ok:
+            _print_package_summary(pkg, target_version, package_status)
             print(f"\nVerification failed for {pkg['name']}.")
             choice = input("Continue anyway? (y/n): ")
             if choice.lower() != 'y':
@@ -232,11 +279,7 @@ def main():
             build_status_msg = "OK: Build and Check SUCCESS" if build_success else "ERROR: Build and Check FAILED"
             package_status.append(build_status_msg)
 
-            # Print summary for this package
-            print(f"\n--- Summary for {pkg['name']} ({pkg['type']}) ---")
-            print(f"  Version: {target_version}")
-            for status in package_status:
-                print(f"  {status}")
+            _print_package_summary(pkg, target_version, package_status)
             
             if dry_run:
                 # 5. If dry_run: User input: If yes, continue to next package

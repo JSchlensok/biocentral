@@ -1,6 +1,6 @@
 [project]
 name = "biocentral-server"
-version = "2.0.0"
+version = "2.0.1"
 description = "Compute server for the biocentral frontend"
 authors = [
     { name = "Sebastian Franz", email = "sebastian.franz@tum.de" },
@@ -29,7 +29,7 @@ dependencies = [
     "click>=8.4.2,<9.0.0",
     "pyrate-limiter>=3.0.0",
     # Git Dependencies
-    "biotrainer @ git+https://github.com/biocentral/biotrainer.git@refactoring/autoeval",
+    "biotrainer @ git+https://github.com/sacdallago/biotrainer.git@v2.1.1",
     #"biotrainer>=2.0.0,<2.1.0",
     "protspace @ git+https://github.com/tsenoner/protspace.git@v4.8.2#subdirectory=apps/protspace",
     "hvi_toolkit @ git+https://github.com/SebieF/hvi_toolkit.git@maintenance/update-biotrainer",
@@ -73,6 +73,15 @@ build-backend = "hatchling.build"
 [tool.hatch.metadata]
 allow-direct-references = true
 
+[tool.hatch.build.targets.sdist]
+include = [
+    "biocentral_server/",
+    "pyproject.toml",
+    "README.md",
+    "Changelog.md",
+    "LICENSE",
+]
+
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"
 markers = [
@@ -91,6 +100,7 @@ override-dependencies = [
     "perf-analyzer>=2.59.1; sys_platform == 'linux'",
 ]
 exclude-newer = "7 days"  # Minimum release age of pypi packages: 7 days
+exclude-newer-package = { biotrainer = false, biotrainer-core = false, pillow = false, numpy = false }  # Except for biotrainer, temporary workaround for pillow and numpy
 
 [tool.coverage.run]
 source = ["biocentral_server"]

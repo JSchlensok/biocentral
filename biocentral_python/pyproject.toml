@@ -15,12 +15,11 @@ dependencies = [
     "biocentral-vis>=2.0.0,<3.0.0",
     "click>=8.0.0,<9.0.0",
     "platformdirs>=4.0.0,<5.0.0",
-    "ipykernel>=7.3.0",
 ]
 
 [project.optional-dependencies]
 server = ["biocentral-server>=2.0.0,<3.0.0"]
-local = ["biotrainer>=2.0.0,<3.0.0"]
+local = ["biotrainer>=2.0.0,<3.0.0", "pymmseqs>=1.2.0"]
 all = ["biotrainer>=2.0.0,<3.0.0", "biocentral-server>=2.0.0,<3.0.0"]
 
 [tool.uv]
