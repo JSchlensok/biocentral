@@ -2,18 +2,13 @@ import 'dart:math';
 
 import 'package:bio_flutter/bio_flutter.dart';
 import 'package:biocentral/plugins/custom_models/bloc/models_commands.dart';
-import 'package:biocentral/plugins/custom_models/data/biotrainer_output_dir_handler.dart';
 import 'package:biocentral/sdk/biocentral_sdk.dart';
 import 'package:biocentral/sdk/bloc/biocentral_command_availability.dart';
 import 'package:biocentral/sdk/domain/biocentral_database_column.dart';
 import 'package:biocentral/sdk/model/split_set.dart';
 import 'package:biocentral/sdk/presentation/widgets/biocentral_command_widget.dart';
-import 'package:biocentral/sdk/presentation/widgets/biocentral_directory_path_selection.dart';
-import 'package:biocentral/sdk/presentation/widgets/biocentral_file_path_selection.dart';
 import 'package:biocentral/sdk/presentation/widgets/biocentral_ratio_slider.dart';
-import 'package:biocentral/sdk/util/path_util.dart';
 import 'package:biocentral/sdk/util/widget_util.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:biocentral/plugins/proteins/domain/protein_repository.dart';
@@ -27,7 +22,6 @@ class SplitDataCommandDisplay extends StatefulWidget {
 }
 
 class _SplitDataCommandDisplayState extends State<SplitDataCommandDisplay> { 
-  final Set<SplitSetGenerationMethod> _availableMethods = const {SplitSetGenerationMethod.random, SplitSetGenerationMethod.existingCluster,SplitSetGenerationMethod.newCluster,};
   final Map<BiocentralDatabaseColumn, Set<SplitSet>> _availableSourceSets = {};
 
   Type? _selectedDatabaseType = Protein;
