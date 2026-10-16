@@ -37,7 +37,7 @@ class _SplitDataCommandDisplayState extends State<SplitDataCommandDisplay> {
 
   // Seed configuration
   bool _useSeed = true;
-  int _seed = 42;
+  int _seed = dateSeed();
 
   // Target column for evaluation & HBI
   String? _selectedTargetColumn;
@@ -746,7 +746,7 @@ class _SplitDataCommandDisplayState extends State<SplitDataCommandDisplay> {
                 icon: const Icon(Icons.casino_outlined, size: 20),
                 onPressed: () {
                   setState(() {
-                    _seed = Random().nextInt(1025);
+                    _seed = Random().nextInt(10000);
                   });
                 },
               ),
@@ -756,8 +756,8 @@ class _SplitDataCommandDisplayState extends State<SplitDataCommandDisplay> {
           Slider(
             value: _seed.toDouble(),
             min: 0,
-            max: 1024,
-            divisions: 1024,
+            max: 9999,
+            divisions: 9999,
             label: '$_seed',
             onChanged: (double val) {
               setState(() {
@@ -766,7 +766,7 @@ class _SplitDataCommandDisplayState extends State<SplitDataCommandDisplay> {
             },
           ),
         const Text(
-          'Fix a seed (0–1024) to make split partitions fully reproducible.',
+          'Fix a seed (0–9999, today as DDMM by default) to make split partitions fully reproducible.',
           style: TextStyle(fontSize: 12, color: Colors.grey),
         ),
       ],
