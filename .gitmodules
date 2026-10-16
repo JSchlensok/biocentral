@@ -1,4 +1,4 @@
 [submodule "biotrainer"]
 	path = biotrainer
-	url = https://github.com/biocentral/biotrainer.git
-	branch = refactoring/autoeval
+	url = https://github.com/JSchlensok/biotrainer.git
+	branch = feat/seed-random-embedder
