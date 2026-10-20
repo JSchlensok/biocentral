@@ -29,6 +29,7 @@ class EngineeringPipelineContext(ALContext):
         coefficient: float,
         n_suggestions: int,
         n_mutations: int,
+        candidate_sequences: Optional[List[str]] = None,
         al_target_value: Optional[float] = None,
         al_target_lb: Optional[float] = None,
         al_target_ub: Optional[float] = None,
@@ -57,6 +58,7 @@ class EngineeringPipelineContext(ALContext):
 
         # Mutation Generation Step
         self.base_sequences = base_sequences
+        self.candidate_sequences = candidate_sequences
         self.n_mutations = n_mutations
         self.mutation_depth: int = 1  # TODO CONFIG
         self.mutations: Optional[List[str]] = None

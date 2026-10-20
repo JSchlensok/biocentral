@@ -182,6 +182,12 @@ class ActiveLearningEngineeringIterationConfig(BaseModel):
         description="Number of mutations to generate and score in this iteration",
         ge=1,
     )
+    candidate_sequences: Optional[List[str]] = Field(
+        default=None,
+        description="Sequences to score in this iteration instead of generating "
+        "mutations (n_mutations is then unused)",
+        min_length=1,
+    )
 
     @field_validator("training_data")
     @classmethod
@@ -196,6 +202,10 @@ class ActiveLearningEngineeringIterationConfig(BaseModel):
         base_sequences = self.base_sequences or []
         if len(base_sequences) != len(set(base_sequences)):
             raise ValueError("base_sequences contains duplicate entries!")
+
+        candidate_sequences = self.candidate_sequences or []
+        if len(candidate_sequences) != len(set(candidate_sequences)):
+            raise ValueError("candidate_sequences contains duplicate entries!")
 
         return self
 

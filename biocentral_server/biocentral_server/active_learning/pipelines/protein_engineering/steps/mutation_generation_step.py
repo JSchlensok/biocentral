@@ -23,6 +23,10 @@ class MutationGenerationStep(PipelineStep[EngineeringPipelineContext]):
         return "Mutations generated."
 
     @staticmethod
+    def _candidates(context: EngineeringPipelineContext) -> List[str]:
+        return context.candidate_sequences or []
+
+    @staticmethod
     def _generate_random_mutations(
         wildtype_sequence: str, training_data_sequences: Set[str], n_mutations: int
     ) -> List[str]:
@@ -57,6 +61,12 @@ class MutationGenerationStep(PipelineStep[EngineeringPipelineContext]):
     def _execute(
         self, context: EngineeringPipelineContext
     ) -> EngineeringPipelineContext:
+        candidate_sequences = self._candidates(context)
+        if candidate_sequences:
+            # The caller scores its own sequences, e.g. a held-out set for evaluation
+            context.mutations = list(candidate_sequences)
+            return context
+
         base_sequences = context.base_sequences
         wildtype_sequence = base_sequences[0]  # TODO handle multiple base sequences
 

@@ -84,5 +84,11 @@ class ActiveLearningEngineeringIterationRequest(BaseModel):
                     "All base_sequences must have the same length as the "
                     "wildtype sequence, indels are not supported"
                 )
+        for candidate_sequence in self.iteration_config.candidate_sequences or []:
+            if len(candidate_sequence) != wildtype_length:
+                raise ValueError(
+                    "All candidate_sequences must have the same length as the "
+                    "wildtype sequence, indels are not supported"
+                )
 
         return self
