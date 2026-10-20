@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **coefficient** | **num** | Exploitation-Exploration coefficient value (must be between 0 and 1, 1 is maximum exploration) | 
 **nSuggestions** | **int** | Number of suggestions to propose from this iteration | 
 **nMutations** | **int** | Number of mutations to generate and score in this iteration | [optional] [default to 1000]
+**candidateSequences** | **BuiltList&lt;String&gt;** | Sequences to score in this iteration instead of generating mutations (n_mutations is then unused) | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

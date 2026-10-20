@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **coefficient** | **float** | Exploitation-Exploration coefficient value (must be between 0 and 1, 1 is maximum exploration) | 
 **n_suggestions** | **int** | Number of suggestions to propose from this iteration | 
 **n_mutations** | **int** | Number of mutations to generate and score in this iteration | [optional] [default to 1000]
+**candidate_sequences** | **List[str]** | Sequences to score in this iteration instead of generating mutations (n_mutations is then unused) | [optional] 
 
 ## Example
 
