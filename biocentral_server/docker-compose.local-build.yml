@@ -6,16 +6,22 @@
 # development settings (bind-mounted source, SERVER_DEBUG, a reduced Triton model list,
 # redis-commander, dozzle). This file is the third combination: prod services, local image.
 #
-#   docker compose -f docker-compose.yml -f docker-compose.local-build.yml up -d --build
+#   GIT_COMMIT=$(git describe --always --dirty --abbrev=40 --exclude='*') \
+#     docker compose -f docker-compose.yml -f docker-compose.local-build.yml up -d --build
 #
 # Naming the -f files explicitly also stops Compose auto-loading the override file.
+# GIT_COMMIT is the commit /health reports, suffixed -dirty for uncommitted changes.
 services:
   biocentral-server:
     image: biocentral-server:local
     build:
       context: .
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:-}
 
   biocentral-worker:
     image: biocentral-server:local
     build:
       context: .
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:-}

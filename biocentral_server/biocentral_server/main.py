@@ -163,7 +163,12 @@ def create_app() -> FastAPI:
     # Health check
     @app.get("/health")
     async def health_check():
-        return {"status": "healthy", "version": __version__}
+        return {
+            "status": "healthy",
+            "version": __version__,
+            # Set by the GIT_COMMIT build arg; None outside such a build
+            "commit": os.environ.get("BIOCENTRAL_GIT_COMMIT") or None,
+        }
 
     # Deep health check
     @app.get("/health/deep")

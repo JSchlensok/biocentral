@@ -57,6 +57,11 @@ COPY --chown=biocentral-server-user:biocentral-server-user worker.py .
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --no-sources --all-extras --no-dev
 
+# Commit the image is built from, reported by /health. Declared after the installs so a new
+# commit only rebuilds from here.
+ARG GIT_COMMIT=""
+ENV BIOCENTRAL_GIT_COMMIT=${GIT_COMMIT}
+
 # Switch to non-root user
 USER biocentral-server-user
 
